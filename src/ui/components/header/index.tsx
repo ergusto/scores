@@ -1,22 +1,29 @@
+import { useState } from "react";
 import { useSession } from "next-auth/react";
 import { Icons } from "@/ui/primitives/icons/index";
 import Link from 'next/link';
 import AuthDropdown from "./auth-dropdown";
 
 export default function AuthHeader() {
-	const { data: session, status } = useSession();
+  const { data: session, status } = useSession();
 
   const isAuthenticated = status === 'authenticated';
 
-	return (
-		<header className="container sticky top-0 z-40 bg-white">
-			<div className="flex items-center justify-between h-16 py-4 border-b border-b-slate-200">
-				<div className="flex gap-6 md:gap-10">
-					<Link href="/" className="flex items-center space-x-2">
-						<Icons.logo />
-						<span className="inline-block font-bold">Scores</span>
-					</Link>
-					<nav className="hidden gap-6 md:flex">
+  if (isAuthenticated) {
+    if (!session?.user?.profileComplete) {
+
+    }
+  }
+
+  return (
+    <header className="container sticky top-0 z-40 bg-white">
+      <div className="flex items-center justify-between h-16 py-4 border-b border-b-slate-200">
+        <div className="flex gap-6 md:gap-10">
+          <Link href="/" className="flex items-center space-x-2">
+            <Icons.logo />
+            <span className="inline-block font-bold">Scores</span>
+          </Link>
+          <nav className="hidden gap-6 md:flex">
             {isAuthenticated ? (
               <>
                 <Link href="/" className="flex items-center text-lg font-semibold text-slate-600 hover:text-slate-800 sm:text-sm">Home</Link>
@@ -27,8 +34,8 @@ export default function AuthHeader() {
                 <Link href="/" className="flex items-center text-lg font-semibold text-slate-600 hover:text-slate-800 sm:text-sm">Home</Link>
               </>
             )}
-					</nav>
-				</div>
+          </nav>
+        </div>
         {isAuthenticated ? (
           <div className="flex items-center text-lg font-semibold text-slate-600 sm:text-sm">
             <AuthDropdown />
@@ -36,7 +43,7 @@ export default function AuthHeader() {
         ) : (
           <div className="flex items-center text-lg font-semibold text-slate-600 sm:text-sm"><Link href="/auth/sign-in">Sign in</Link></div>
         )}
-			</div>
-		</header>
-	);
+      </div>
+    </header>
+  );
 }
