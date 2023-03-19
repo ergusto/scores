@@ -1,0 +1,140 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  // NOTE: When using postgresql, mysql or sqlserver, uncomment the @db.Text annotations in model Account below
+  // Further reading:
+  // https://next-auth.js.org/adapters/prisma#create-the-prisma-schema
+  // https://www.prisma.io/docs/reference/api-reference/prisma-schema-reference#string
+  url      = env("DATABASE_URL")
+}
+
+model Example {
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+// Necessary for Next auth
+model Account {
+  id                String  @id @default(cuid())
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String? @db.Text
+  access_token      String? @db.Text
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String? @db.Text
+  session_state     String?
+  user              User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+}
+
+model Session {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model User {
+  id              String          @id @default(cuid())
+  name            String?
+  email           String?         @unique
+  emailVerified   DateTime?
+  image           String?
+  profileComplete Boolean         @default(false)
+  accounts        Account[]
+  sessions        Session[]
+  games           Game[]          @relation("Games")
+  wonGames        Game[]          @relation("WonGames")
+  wonHands        Hand[]          @relation("WonHands")
+  dealtHands      Hand[]          @relation("DealtHands")
+  handScores      HandScore[]
+  GameScore       GameScore[]
+  GameUserOrder   GameUserOrder[]
+}
+
+model VerificationToken {
+  identifier String
+  token      String   @unique
+  expires    DateTime
+
+  @@unique([identifier, token])
+}
+
+model Profile {
+  id       String @id @default(cuid())
+  username String
+}
+
+model Match {
+  id    String @id @default(cuid())
+  games Game[]
+}
+
+enum GameType {
+  FIRST_TO
+  SCORE_AFTER
+}
+
+model Game {
+  id           String   @id @default(cuid())
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+  startedAt    DateTime
+  endedAt      DateTime
+  lastActivity DateTime
+  users        User[]   @relation(name: "Games")
+  winner       User?    @relation(name: "WonGames", fields: [winnerUserId], references: [id])
+  winnerUserId String?
+  match        Match?   @relation(fields: [matchId], references: [id])
+  matchId      String?
+  title        String
+  active       Boolean  @default(true)
+  gameType     GameType @default(FIRST_TO)
+  gameTypeMeta Int
+  Hand         Hand[]
+}
+
+model Hand {
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  game      Game     @relation(fields: [gameId], references: [id])
+  gameId    String
+  dealer    User?    @relation(name: "DealtHands", fields: [dealerId], references: [id])
+  dealerId  String?
+  winner    User?    @relation(name: "WonHands", fields: [winnerId], references: [id])
+  winnerId  String?
+}
+
+model HandScore {
+  id     String @id @default(cuid())
+  user   User   @relation(fields: [userId], references: [id])
+  userId String
+  score  Int
+}
+
+model GameScore {
+  id     String @id @default(cuid())
+  user   User   @relation(fields: [userId], references: [id])
+  userId String
+}
+
+model GameUserOrder {
+  id     String @id @default(cuid())
+  user   User   @relation(fields: [userId], references: [id])
+  userId String
+  order  Int
+}

@@ -1,0 +1,42 @@
+import {
+  Check,
+  ChevronLeft,
+  ChevronRight,
+  Dices,
+  HelpCircle,
+  Loader2,
+  LogOut,
+  Trash,
+  Settings,
+  MoreVertical,
+  Plus,
+  AlertTriangle,
+  User,
+  ArrowRight,
+  ArrowLeft,
+  Sun,
+  X,
+  type Icon as LucideIcon,
+} from "lucide-react"
+
+export type Icon = LucideIcon;
+
+export const Icons = {
+  logo: Dices,
+  close: X,
+  spinner: Loader2,
+  chevronLeft: ChevronLeft,
+  chevronRight: ChevronRight,
+  trash: Trash,
+  settings: Settings,
+  ellipsis: MoreVertical,
+  add: Plus,
+  warning: AlertTriangle,
+  user: User,
+  arrowLeft: ArrowLeft,
+  arrowRight: ArrowRight,
+  help: HelpCircle,
+  check: Check,
+  logout: LogOut,
+  sun: Sun,
+};
