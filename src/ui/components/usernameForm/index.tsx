@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { useRouter } from "next/router";
 import { api } from "@/lib/api";
@@ -10,6 +11,7 @@ type FormValues = {
 export default function UsernameForm() {
   const router = useRouter();
   const { register, handleSubmit, formState: { errors } } = useForm<FormValues>();
+  const [mutationError, setMutationError] = useState('');
 
   const { mutate } = api.user.setUsername.useMutation({
     onSuccess: () => {
