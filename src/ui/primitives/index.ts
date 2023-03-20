@@ -21,3 +21,5 @@ export {
 export { Icons, type Icon } from "./icons";
 
 export { Input } from "./input";
+
+export { Label } from "./label";

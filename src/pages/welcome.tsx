@@ -1,5 +1,6 @@
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
+import WelcomeAlert from "@/ui/components/welcome-alert";
 
 export default function Welcome() {
   const { data: session, status } = useSession();
@@ -9,11 +10,14 @@ export default function Welcome() {
     router.push('/auth/sign-in');
   }
 
+  if (session?.user?.profileComplete) {
+    router.push('/');
+  }
+
   return (
     <div className="container grid gap-12 md:grid-cols-[200px_1fr]">
       <h2>Welcome to Scores</h2>
-      <p>A few details are required to finalise setting up your account...</p>
-
+      <WelcomeAlert />
     </div>
   );
 }

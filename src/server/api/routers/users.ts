@@ -7,17 +7,20 @@ import {
 } from "@/server/api/trpc";
 
 export const userRouter = createTRPCRouter({
-  exists: publicProcedure
-    .input(z.object({ email: z.string() }))
-    .query( async ({ ctx, input }) => {
-      const userExists = !!await ctx.prisma.user.findFirst({
+  setUsername: protectedProcedure
+    .input(z.object({ username: z.string() }))
+    .mutation(async ({ ctx, input }) => {
+      const { username } = input;
+
+      await ctx.prisma.user.update({
         where: {
-          email: input.email
+          id: ctx.session.user.id
+        },
+        data: {
+          username,
+          profileComplete: true
         }
-      });
-      return {
-        userExists
-      };
+      })
     }),
 
   getAll: publicProcedure.query(({ ctx }) => {
