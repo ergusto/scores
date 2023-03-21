@@ -1,5 +1,5 @@
 import Link from "next/link";
-import AuthorisationForm from "@/ui/components/authForm";
+import AuthorisationForm from "@/ui/components/auth-form";
 
 export default function LogIn() {
   return (
