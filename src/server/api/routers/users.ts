@@ -1,5 +1,6 @@
 import { z } from "zod";
 
+import { TRPCError } from "@trpc/server";
 import {
   createTRPCRouter,
   publicProcedure,
@@ -12,7 +13,20 @@ export const userRouter = createTRPCRouter({
     .mutation(async ({ ctx, input }) => {
       const { username } = input;
 
-      await ctx.prisma.user.update({
+      const userExists = await ctx.prisma.user.findFirst({
+        where: {
+          username
+        }
+      });
+
+      if (userExists) {
+        throw new TRPCError({
+          code: 'BAD_REQUEST',
+          message: "That username is not available"
+        });
+      }
+
+      return await ctx.prisma.user.update({
         where: {
           id: ctx.session.user.id
         },
@@ -20,7 +34,7 @@ export const userRouter = createTRPCRouter({
           username,
           profileComplete: true
         }
-      })
+      });
     }),
 
   getAll: publicProcedure.query(({ ctx }) => {

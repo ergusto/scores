@@ -7,7 +7,6 @@ import {
 } from "next-auth";
 import { PrismaAdapter } from "@next-auth/prisma-adapter";
 import EmailProvider from "next-auth/providers/email";
-import { env } from "@/env.mjs";
 import { prisma } from "@/server/db";
 
 /**
@@ -53,8 +52,6 @@ export const authOptions: NextAuthOptions = {
     session({ session, user }) {
       if (session.user) {
         session.user.id = user.id;
-        session.user.profileComplete = user.profileComplete;
-        session.user.username = user.username;
         // session.user.role = user.role; <-- put other properties on the session here
       }
       return session;
