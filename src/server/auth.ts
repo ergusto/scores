@@ -29,6 +29,7 @@ declare module "next-auth" {
   interface User extends DefaultUser {
     id: string;
     profileComplete: true;
+    username: string;
   }
 
   // interface User {
@@ -54,7 +55,6 @@ export const authOptions: NextAuthOptions = {
         session.user.id = user.id;
         session.user.profileComplete = user.profileComplete;
         session.user.username = user.username;
-        // session.user.role = user.role; <-- put other properties on the session here
       }
       return session;
     },

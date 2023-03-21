@@ -25,7 +25,7 @@ export default function UsernameForm() {
   const onUsernameFormSubmitted: SubmitHandler<FormValues> = async (username: FormValues) => {
     mutate(username, {
       onSuccess: () => {
-        getSession();
+        router.reload();
       }
     });
   };
