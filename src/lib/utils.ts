@@ -9,8 +9,3 @@ export function cn(...inputs: ClassValue[]) {
 export function validateEmail(email: string) {
   return EmailValidator.validate(email);
 }
-
-export function reloadSession() {
-  const event = new Event("visibilitychange");
-  document.dispatchEvent(event);
-}

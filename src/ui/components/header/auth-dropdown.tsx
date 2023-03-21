@@ -24,7 +24,7 @@ export default function AuthDropdown() {
           <p className="mt-1 text-slate-500">{session?.user?.email}</p>
         </DropdownMenuLabel>
         <DropdownMenuSeparator />
-        <DropdownMenuItem onSelect={() => signOut({ callbackUrl: '/auth/sign-in', redirect: false })}>
+        <DropdownMenuItem className="justify-end" onSelect={() => { signOut({ callbackUrl: '/auth/sign-in', redirect: false }) } }>
           <Icons.logout className="mr-2 h-4 w-4" />
           <span>Logout</span>
         </DropdownMenuItem>
