@@ -10,7 +10,7 @@ import {
   AlertDialogTrigger,
 } from "@/ui/primitives/alert-dialog";
 import { Button } from "@/ui/primitives/button";
-import UsernameForm from "../usernameForm";
+import UsernameForm from "../username-form";
 
 export default function WelcomeAlert() {
   const [shouldOpen, setShouldOpen] = useState(false);

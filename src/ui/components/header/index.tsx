@@ -1,19 +1,12 @@
-import { useState } from "react";
 import { useSession } from "next-auth/react";
 import { Icons } from "@/ui/primitives/icons/index";
 import Link from 'next/link';
 import AuthDropdown from "./auth-dropdown";
 
 export default function AuthHeader() {
-  const { data: session, status } = useSession();
+  const { status } = useSession();
 
   const isAuthenticated = status === 'authenticated';
-
-  if (isAuthenticated) {
-    if (!session?.user?.profileComplete) {
-
-    }
-  }
 
   return (
     <header className="container sticky top-0 z-40 bg-white">

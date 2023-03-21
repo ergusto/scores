@@ -2,7 +2,6 @@ import { useState } from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { useRouter } from "next/router";
 import { api } from "@/lib/api";
-import { getSession } from "next-auth/react";
 import { Label, Input, Button } from "@/ui/primitives"
 
 type FormValues = {
