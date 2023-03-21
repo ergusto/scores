@@ -1,6 +1,7 @@
 import Head from "next/head";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
+import PageContainer from '@/ui/components/page-container'
 
 function Home() {
   const { status } = useSession();
@@ -18,7 +19,9 @@ function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <h1>Dashboard</h1>
+      <PageContainer>
+        <h1>Dashboard</h1>
+      </PageContainer>
 
     </>
   );

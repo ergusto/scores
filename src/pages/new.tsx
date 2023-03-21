@@ -1,6 +1,7 @@
 import { usePathname } from "next/navigation";
 import Link from 'next/link';
 import { cn } from "@/lib/utils"
+import PageContainer from "@/ui/components/page-container";
 
 const menuItems = [
 	{
@@ -24,7 +25,7 @@ export default function NewGameLayout({
 	const path = usePathname();
 
 	return (
-		<div className="container grid gap-12 md:grid-cols-[200px_1fr]">
+    <PageContainer>
 			<aside className="hidden w-[200px] flex-col md:flex">
 				<nav className="items-start grid gap-2">
 					{menuItems.map(menuItem => {
@@ -52,7 +53,7 @@ export default function NewGameLayout({
 					</div>
 				</div>
 			</main>
-		</div>
+		</PageContainer>
 	);
 }
 

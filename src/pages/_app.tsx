@@ -4,6 +4,7 @@ import { SessionProvider } from "next-auth/react";
 
 import { api } from "@/lib/api";
 import Layout from "@/ui/components/layout";
+import { Toaster } from "@/ui/primitives";
 
 import "@/ui/styles/globals.css";
 
@@ -15,6 +16,7 @@ const MyApp: AppType<{ session: Session | null }> = ({
     <SessionProvider session={session}>
       <Layout>
         <Component {...pageProps} />
+        <Toaster />
       </Layout>
     </SessionProvider>
   );

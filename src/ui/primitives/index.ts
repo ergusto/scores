@@ -23,3 +23,16 @@ export { Icons, type Icon } from "./icons";
 export { Input } from "./input";
 
 export { Label } from "./label";
+
+export {
+  type ToastProps,
+  type ToastActionElement,
+  ToastProvider,
+  ToastViewport,
+  Toast,
+  ToastTitle,
+  ToastDescription,
+  ToastClose,
+  ToastAction,
+  Toaster
+} from "./toast";
