@@ -24,6 +24,7 @@
     "class-variance-authority": "^0.4.0",
     "clsx": "^1.2.1",
     "email-validator": "^2.0.4",
+    "immer": "^9.0.19",
     "lodash.debounce": "^4.0.8",
     "lucide-react": "^0.125.0",
     "next": "^13.2.1",
@@ -34,7 +35,8 @@
     "react-hook-form": "^7.43.5",
     "superjson": "1.9.1",
     "tailwind-merge": "^1.10.0",
-    "zod": "^3.20.6"
+    "zod": "^3.20.6",
+    "zustand": "^4.3.6"
   },
   "devDependencies": {
     "@types/eslint": "^8.21.1",

@@ -48,22 +48,26 @@ model Session {
 }
 
 model User {
-  id              String          @id @default(cuid())
-  name            String?
-  email           String?         @unique
-  username        String?         @unique
-  emailVerified   DateTime?
-  image           String?
-  profileComplete Boolean         @default(false)
-  accounts        Account[]
-  sessions        Session[]
-  games           Game[]          @relation("Games")
-  wonGames        Game[]          @relation("WonGames")
-  wonHands        Hand[]          @relation("WonHands")
-  dealtHands      Hand[]          @relation("DealtHands")
-  handScores      HandScore[]
-  GameScore       GameScore[]
-  GameUserOrder   GameUserOrder[]
+  id                         String          @id @default(cuid())
+  name                       String?
+  email                      String?         @unique
+  username                   String?         @unique
+  emailVerified              DateTime?
+  image                      String?
+  profileComplete            Boolean         @default(false)
+  friends                    User[]          @relation("UserFriends")
+  accounts                   Account[]
+  sessions                   Session[]
+  games                      Game[]          @relation("Games")
+  wonGames                   Game[]          @relation("WonGames")
+  wonHands                   Hand[]          @relation("WonHands")
+  dealtHands                 Hand[]          @relation("DealtHands")
+  handScores                 HandScore[]
+  gameScores                 GameScore[]
+  gameUserOrders             GameUserOrder[]
+  reverseFriends             User[]          @relation("UserFriends")
+  receivedFriendshipRequests FriendRequest[] @relation("FriendshipRequests")
+  reverseFriendshipRequests  FriendRequest[] @relation("SentFriendshipRequests")
 }
 
 model VerificationToken {
@@ -72,6 +76,15 @@ model VerificationToken {
   expires    DateTime
 
   @@unique([identifier, token])
+}
+
+model FriendRequest {
+  id         String   @id @default(cuid())
+  from_user  User     @relation("SentFriendshipRequests", fields: [fromUserId], references: [id])
+  to_user    User     @relation("FriendshipRequests", fields: [toUserId], references: [id])
+  createdAt  DateTime @default(now())
+  fromUserId String
+  toUserId   String
 }
 
 model Match {
@@ -100,7 +113,7 @@ model Game {
   active       Boolean  @default(true)
   gameType     GameType @default(FIRST_TO)
   gameTypeMeta Int
-  Hand         Hand[]
+  hands        Hand[]
 }
 
 model Hand {

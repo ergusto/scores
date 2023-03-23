@@ -2,8 +2,7 @@ import { useState } from "react";
 import { useRouter } from "next/router";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { signIn, useSession } from "next-auth/react";
-import { Button, Input } from "@/ui/primitives";
-import { Icons } from "@/ui/primitives/icons"
+import { Button, Input, Icons } from "@/ui/primitives";
 import { toast } from "@/lib/use-toast-hook";
 
 interface AuthorisationFormProps {

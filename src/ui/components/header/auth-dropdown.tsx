@@ -1,4 +1,5 @@
 import { useSession, signOut } from "next-auth/react";
+import Link from "next/link";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -23,6 +24,12 @@ export default function AuthDropdown() {
           <p>My Account</p>
           <p className="mt-1 text-slate-500">{session?.user?.email}</p>
         </DropdownMenuLabel>
+        <DropdownMenuSeparator />
+        <DropdownMenuItem className="justify-end">
+          <Link className="block" href="/settings"> 
+            Settings
+          </Link>
+        </DropdownMenuItem>
         <DropdownMenuSeparator />
         <DropdownMenuItem className="justify-end" onSelect={() => { signOut({ callbackUrl: '/auth/sign-in', redirect: false }) } }>
           <Icons.logout className="mr-2 h-4 w-4" />

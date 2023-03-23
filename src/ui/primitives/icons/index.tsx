@@ -8,6 +8,7 @@ import {
   LogOut,
   Trash,
   Settings,
+  Search,
   MoreVertical,
   Plus,
   AlertTriangle,
@@ -39,4 +40,5 @@ export const Icons = {
   check: Check,
   logout: LogOut,
   sun: Sun,
+  search: Search,
 };
