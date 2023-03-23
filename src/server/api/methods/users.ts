@@ -1,8 +1,16 @@
 import { PrismaClient } from "@prisma/client";
 import { User } from "@prisma/client";
+import { prisma } from "@/server/db";
 
-type PrismaClientType = typeof PrismaClient;
-
-export default async function addGameHistoryToUsers(prisma: PrismaClientType, users: User[]) {
+async function addGameHistoryToUser(user1: User, user2: User) {
 
 }
+
+async function addGameHistoryToUsers(user: User, users: User[]) {
+  
+}
+
+export {
+  addGameHistoryToUser,
+  addGameHistoryToUsers
+};
