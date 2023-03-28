@@ -6,6 +6,7 @@ import {
   protectedProcedure,
 } from "@/server/api/trpc";
 import { getOrCreateGameHistoryForUser } from "../methods/users";
+import { type ExtendedUser } from "@/types";
 
 export const userRouter = createTRPCRouter({
   setUsername: protectedProcedure
@@ -64,10 +65,14 @@ export const userRouter = createTRPCRouter({
         select: {
           username: true,
           id: true,
+          reverseOpponentHistories: {
+            where: {
+              userId: ctx.session.user.id
+            }
+          }
         },
       });
 
-      user.history = await getOrCreateGameHistoryForUser(ctx.session.user, user);
       return user;
     }),
 
