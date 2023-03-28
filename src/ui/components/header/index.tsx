@@ -30,11 +30,11 @@ export default function AuthHeader() {
           </nav>
         </div>
         {isAuthenticated ? (
-          <div className="flex items-center text-lg font-semibold text-slate-600 sm:text-sm">
+          <div className="flex items-center font-semibold text-slate-600 text-sm">
             <AuthDropdown />
           </div>
         ) : (
-          <div className="flex items-center text-lg font-semibold text-slate-600 sm:text-sm"><Link href="/auth/sign-in">Sign in</Link></div>
+          <div className="flex items-center font-semibold text-slate-600 text-sm"><Link href="/auth/sign-in">Sign in</Link></div>
         )}
       </div>
     </header>

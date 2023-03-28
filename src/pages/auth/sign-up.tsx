@@ -4,7 +4,7 @@ import { Icons } from "@/ui/primitives";
 
 export default function LogIn() {
   return (
-    <div className="container flex flex-col items-center justify-center h-[calc(100vh-128px)] !mt-0 mx-auto">
+    <div className="container flex flex-col items-center justify-center h-[calc(100vh-128px)] min-h-[400px] !mt-0 mx-auto">
       <div className="mx-auto flex w-full flex-col justify-center space-y-6 sm:w-[350px]">
         <div className="flex flex-col text-center space-y-2">
           <Icons.logo className="mx-auto h-7 w-7" />
