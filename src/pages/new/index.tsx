@@ -1,4 +1,6 @@
-import { useNewGameState } from "@/stores/newGame";
+import { useNewGameState } from "@/state/newGame";
+import { useSession } from "next-auth/react";
+import { useRouter } from "next/router";
 import PageContainer from "@/ui/components/page-container"
 import { NewGameNav, StepOne, StepTwo, StepThree } from "@/ui/components/new-game";
 import { type Step } from "@/ui/components/new-game/types";
@@ -21,8 +23,14 @@ const steps: Step[] = [
 ];
 
 export default function NewGameLayout() {
+  const { status } = useSession();
+  const router = useRouter();
   const { currentStep } = useNewGameState();
   const StepComponent = steps.find(step => step.number === currentStep)?.component as React.FunctionComponent;
+
+  if (status === 'unauthenticated') {
+    void router.push('/auth/sign-in');
+  }
 
 	return (
     <PageContainer>

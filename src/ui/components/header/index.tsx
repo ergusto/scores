@@ -14,7 +14,7 @@ export default function AuthHeader() {
         <div className="flex gap-6 md:gap-10">
           <Link href="/" className="flex items-center space-x-2">
             <Icons.logo />
-            <span className="inline-block font-bold">Scores</span>
+            <span className="inline-block font-bold">Scores On The Doors</span>
           </Link>
           <nav className="hidden gap-6 md:flex">
             {isAuthenticated ? (

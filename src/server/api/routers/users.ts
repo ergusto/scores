@@ -5,6 +5,7 @@ import {
   createTRPCRouter,
   protectedProcedure,
 } from "@/server/api/trpc";
+import { getOrCreateGameHistoryForUser } from "../methods/users";
 
 export const userRouter = createTRPCRouter({
   setUsername: protectedProcedure
@@ -49,7 +50,14 @@ export const userRouter = createTRPCRouter({
     .query(async ({ ctx, input }) => {
       const { username } = input;
 
-      return await ctx.prisma.user.findFirstOrThrow({
+      if (username.toLowerCase().trim() === ctx.session.user.username) {
+        throw new TRPCError({
+          code: 'BAD_REQUEST',
+          message: 'You cannot play a game against yourself',
+        });
+      }
+
+      const user = await ctx.prisma.user.findFirstOrThrow({
         where: {
           username
         },
@@ -58,6 +66,9 @@ export const userRouter = createTRPCRouter({
           id: true,
         },
       });
+
+      user.history = await getOrCreateGameHistoryForUser(ctx.session.user, user);
+      return user;
     }),
 
 });

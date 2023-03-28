@@ -8,7 +8,7 @@ function Home() {
   const router = useRouter();
 
   if (status === "unauthenticated") {
-    router.push("/auth/sign-in");
+    void router.push("/auth/sign-in");
   }
 
   return (

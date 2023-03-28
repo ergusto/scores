@@ -48,24 +48,24 @@ model Session {
 }
 
 model User {
-  id                      String            @id @default(cuid())
-  name                    String?
-  email                   String?           @unique
-  username                String?           @unique
-  emailVerified           DateTime?
-  image                   String?
-  profileComplete         Boolean           @default(false)
-  accounts                Account[]
-  sessions                Session[]
-  games                   Game[]            @relation("Games")
-  wonGames                Game[]            @relation("WonGames")
-  wonHands                Hand[]            @relation("WonHands")
-  dealtHands              Hand[]            @relation("DealtHands")
-  handScores              HandScore[]
-  gameScores              GameScore[]
-  gameUserOrders          GameUserOrder[]
-  OpponentHistory         OpponentHistory[] @relation("OpponentHistories")
-  ReverseOpponetHistories OpponentHistory[] @relation("ReverseOpponetHistories")
+  id                       String            @id @default(cuid())
+  name                     String?
+  email                    String?           @unique
+  username                 String?           @unique
+  emailVerified            DateTime?
+  image                    String?
+  profileComplete          Boolean           @default(false)
+  accounts                 Account[]
+  sessions                 Session[]
+  games                    Game[]            @relation("Games")
+  wonGames                 Game[]            @relation("WonGames")
+  wonHands                 Hand[]            @relation("WonHands")
+  dealtHands               Hand[]            @relation("DealtHands")
+  handScores               HandScore[]
+  gameScores               GameScore[]
+  gameUserOrders           GameUserOrder[]
+  opponentHistories        OpponentHistory[] @relation("OpponentHistories")
+  reverseOpponentHistories OpponentHistory[] @relation("ReverseOpponetHistories")
 }
 
 model VerificationToken {
@@ -87,11 +87,20 @@ enum GameType {
 }
 
 model OpponentHistory {
-  id         String @id @default(cuid())
-  user       User   @relation(name: "OpponentHistories", fields: [userId], references: [id])
-  opponent   User   @relation(name: "ReverseOpponetHistories", fields: [opponentId], references: [id])
-  userId     String
-  opponentId String
+  id            String @id @default(cuid())
+  user          User   @relation(name: "OpponentHistories", fields: [userId], references: [id])
+  opponent      User   @relation(name: "ReverseOpponetHistories", fields: [opponentId], references: [id])
+  userId        String
+  opponentId    String
+  handsPlayed   Int?    @default(0)
+  handsWon      Int?    @default(0)
+  handsLost     Int?    @default(0)
+  gamesPlayed   Int?    @default(0)
+  gamesWon      Int?    @default(0)
+  gamesLost     Int?    @default(0)
+  matchesPlayed Int?    @default(0)
+  matchesWon    Int?    @default(0)
+  matchesLost   Int?    @default(0)
 }
 
 model Game {

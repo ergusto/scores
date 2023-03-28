@@ -7,11 +7,11 @@ export default function Welcome() {
   const router = useRouter();
 
   if (status === 'unauthenticated') {
-    router.push('/auth/sign-in');
+    void router.push('/auth/sign-in');
   }
 
   if (session?.user?.profileComplete) {
-    router.push('/');
+    void router.push('/');
   }
 
   return (

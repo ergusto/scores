@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useRouter } from "next/router";
-import { useForm, SubmitHandler } from "react-hook-form";
+import { useForm, type SubmitHandler } from "react-hook-form";
 import { signIn, useSession } from "next-auth/react";
 import { Button, Input, Icons } from "@/ui/primitives";
 import { toast } from "@/lib/use-toast-hook";
@@ -21,14 +21,13 @@ export default function AuthorisationForm({ buttonText = 'Sign In' }: Authorisat
   const { register, handleSubmit, formState: { errors } } = useForm<FormValues>();
 
   if (sessionStatus === "authenticated") {
-    router.push("/");
+    void router.push("/");
   }
 
   const onLoginFormSubmitted: SubmitHandler<FormValues> = async (credentials: FormValues) => {
     setIsLoading(true);
 
     try {
-
       const result = await signIn("email", {
         email: credentials.email,
         redirect: false,
@@ -37,11 +36,12 @@ export default function AuthorisationForm({ buttonText = 'Sign In' }: Authorisat
       setIsLoading(false);
 
       if (!result?.ok) {
-        return toast({
+        toast({
           title: "Something went wrong",
           description: "Your sign in request failed. Please try again.",
           variant: "destructive"
         });
+        return;
       }
 
       toast({
@@ -50,7 +50,7 @@ export default function AuthorisationForm({ buttonText = 'Sign In' }: Authorisat
       });
 
     } catch(error) {
-      return toast({
+      toast({
         title: "Something went wrong",
         description: "Your sign in request failed. Please try again.",
         variant: "destructive"
@@ -59,6 +59,8 @@ export default function AuthorisationForm({ buttonText = 'Sign In' }: Authorisat
   };
 
   return (
+    // See https://github.com/react-hook-form/react-hook-form/discussions/8622
+    // eslint-disable-next-line @typescript-eslint/no-misused-promises
     <form onSubmit={handleSubmit(onLoginFormSubmitted)}>
       <div className="grid gap-2">
         <div className="grid gap-1">

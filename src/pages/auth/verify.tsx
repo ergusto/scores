@@ -1,8 +1,4 @@
-interface VerifyRequestPageProps {
-  url: URL
-}
-
-export default function Verify({ url }: VerifyRequestPageProps) {
+export default function Verify() {
   return (
     <div className='min-h-screen'>
       <div className="container flex flex-col items-center justify-center w-screen h-screen mx-auto">

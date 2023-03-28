@@ -17,7 +17,7 @@ export default function WelcomeAlert() {
 
   useEffect(() => {
     setShouldOpen(true);
-  });
+  }, []);
 
   return (
     <AlertDialog open={shouldOpen}>
@@ -34,7 +34,7 @@ export default function WelcomeAlert() {
         <AlertDialogFooter>
           <div className="basis-full">
             <UsernameForm />
-            <div className="mt-3 text-xs font-semibold">Or <a className="underline hover:cursor-pointer" onClick={() => signOut({ redirect: false })}>Sign out</a></div>
+            <div className="mt-3 text-xs font-semibold">Or <a className="underline hover:cursor-pointer" onClick={() => void signOut({ redirect: false })}>Sign out</a></div>
           </div>
         </AlertDialogFooter>
       </AlertDialogContent>

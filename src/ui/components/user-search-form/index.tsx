@@ -1,45 +1,95 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
+import { getQueryKey } from "@trpc/react-query";
+import { useQueryClient } from "@tanstack/react-query";
 import { api } from "@/lib/api";
-import { Button, Input } from "@/ui/primitives";
+import { Button, Input, Icons } from "@/ui/primitives";
+import type { SimpleUser } from "@/types";
+import UserSearchFormItem from "./item";
 
 interface UserSearchFormProps {
-  onSelect: Function;
+  onSelect: (user: SimpleUser) => void;
+  users: SimpleUser[];
+  onRemove: (user: SimpleUser) => void;
 }
 
 type FormValues = {
   username: string;
 }
 
-export default function UserSearchForm({ onSelect }: UserSearchFormProps) {
-  const [username, setUsername] = useState('');
+export default function UserSearchForm({ users, onSelect, onRemove }: UserSearchFormProps) {
+  const [searchString, setSearchString] = useState('');
   const [error, setError] = useState('');
-  const { register, handleSubmit, formState: { errors } } = useForm<FormValues>();
+  const { reset: resetForm, register, handleSubmit, formState: { errors } } = useForm<FormValues>();
 
-  const { status, refetch } = api.user.getByUsername.useQuery({ username }, {
+  const { data, refetch, isFetching } = api.user.getByUsername.useQuery({ username: searchString }, {
     enabled: false,
-    onSuccess: data => {
-      console.log(data);
-    },
+    retry: 1,
     onError: error => {
-      console.dir('Error onError', error);
+      if (error.message.includes("No User found")) {
+        setError("No user found");
+      } else if (error.message.includes("You cannot play a game against yourself")) {
+        setError("You cannot play a game against yourself");
+      } else {
+        setError("An error occurred");
+      }
     },
+    onSuccess: (data: SimpleUser) => {
+      onSelect(data);
+      resetForm();
+    }
   });
 
-  const onSubmit = async ({ username }: { username: string; }) => {
-    setUsername(username);
+  const queryClient = useQueryClient();
+  const queryKey = getQueryKey(api.user.getByUsername, { username: searchString });
+
+  const onChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchString(event.target.value);
+    setError('');
+    if (isFetching) {
+      void queryClient.cancelQueries(queryKey);
+    }
   };
 
-  useEffect(() => {
-    if (username && username.length) {
-      refetch();
+  const onSubmit = async () => {
+    await refetch();
+    if (data) {
+      onSelect(data);
+      resetForm();
     }
-  }, [username]);
+  };
 
   return (
-    <form className="flex w-full items-center space-x-2" onSubmit={handleSubmit(onSubmit)}>
-      <Input {...register("username", { required: true })} type="text" placeholder="Username" hasError={!!errors?.username} />
-      <Button type="submit">Search</Button>
-    </form>
+    <>
+      {/* eslint-disable-next-line @typescript-eslint/no-misused-promises */}
+      <form onSubmit={handleSubmit(onSubmit)}>
+        <div className="flex w-full items-center space-x-2"> 
+          <Input {...register("username", { required: true, onChange })} type="text" placeholder="Username" hasError={!!errors?.username || !!error} />
+          <Button type="submit" disabled={!!isFetching}>
+            {isFetching && <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />}
+            Search
+          </Button>
+        </div>
+        {
+          (errors.username?.type === 'required' && <span className="px-1 text-xs text-red-600">Username is required</span>)
+        ||
+          (error && <span className="px-1 text-xs text-red-600">{error}</span>)
+        }
+      </form>
+      {!!users?.length && (
+        <div className="w-full">
+          <h3 className="block mt-6 mb-4 text-sm font-medium text-gray-900">Opponents</h3>
+          <ul className="flex flex-col divide-y w-full divide-gray-200 border-gray-200 border rounded-md shadow">
+            {users.map(user => {
+              return (
+                <li key={user.id} className="py-3 px-4">
+                  <UserSearchFormItem user={user} onRemove={(user: SimpleUser) => onRemove(user)} />
+                </li>
+              );
+            })}
+          </ul>
+        </div>
+      )}
+    </>
   );
 }

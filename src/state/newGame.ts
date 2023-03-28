@@ -10,7 +10,7 @@ interface NewGameState {
   title: string;
   gameType: GameTypeType;
   gameTypeMeta: number | null;
-  users: SimpleUser[];
+  selectedUserUsernames: string[];
   actions: {
     setCurrentStep: (currentStep: CurrentStepType) => void,
     setTitle: (title: string) => void,
@@ -27,7 +27,7 @@ const useNewGameStore = create(
     title: "",
     gameType: "ft",
     gameTypeMeta: null,
-    users: [],
+    selectedUserUsernames: [],
     actions: {
       setCurrentStep: currentStep => set({ currentStep }),
       setTitle: title  => set({ title }),
@@ -35,12 +35,14 @@ const useNewGameStore = create(
       setGameTypeMeta: gameTypeMeta => set({ gameTypeMeta }),
       addUser(user: SimpleUser) {
         set(state => {
-          state.users.push(user);
+          if (state.selectedUserUsernames.findIndex(selectedUserUsername => selectedUserUsername === user.username) === -1) {
+            state.selectedUserUsernames.push(user.username);
+          }
         });
       },
       removeUser(user) {
         set(state => {
-          state.users.filter((obj: SimpleUser) => obj.id !== user.id);
+          state.selectedUserUsernames = state.selectedUserUsernames.filter((username: string) => username !== user.username);
         });
       },
     }
@@ -53,7 +55,7 @@ export const useNewGameState = () => useNewGameStore(
     title: state.title,
     gameType: state.gameType,
     gameTypeMeta: state.gameTypeMeta,
-    users: state.users,
+    selectedUserUsernames: state.selectedUserUsernames,
     actions: state.actions,
   }),
   shallow
@@ -61,11 +63,11 @@ export const useNewGameState = () => useNewGameStore(
 
 export const useNewGameCanContinue = () => useNewGameStore(
   state => {
-    const { currentStep, title, gameType, gameTypeMeta, users } = state;
+    const { currentStep, title, selectedUserUsernames } = state;
     let canContinue = false;
 
     if (currentStep === 1) {
-      canContinue = !!title.length && !!users.length;
+      canContinue = !!title.length && !!selectedUserUsernames.length;
     }
 
     return {
@@ -81,11 +83,11 @@ interface ProgressMap {
 
 export const useNewGameStepProgress = () => useNewGameStore(
   state => {
-    const { title, gameType, gameTypeMeta, users } = state;
+    const { title, selectedUserUsernames } = state;
 
     const progressMap: ProgressMap = {
-      1: !!title.length && !!users.length,
-      2: false,
+      1: true,
+      2: !!title.length && !!selectedUserUsernames.length,
       3: false,
     };
 

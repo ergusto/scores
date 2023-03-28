@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useForm, SubmitHandler } from "react-hook-form";
+import { useForm, type SubmitHandler } from "react-hook-form";
 import { useRouter } from "next/router";
 import { api } from "@/lib/api";
 import { Label, Input, Button } from "@/ui/primitives"
@@ -21,7 +21,7 @@ export default function UsernameForm() {
     }
   });
 
-  const onUsernameFormSubmitted: SubmitHandler<FormValues> = async (username: FormValues) => {
+  const onUsernameFormSubmitted: SubmitHandler<FormValues> = (username: FormValues) => {
     mutate(username, {
       onSuccess: () => {
         router.reload();
@@ -31,7 +31,7 @@ export default function UsernameForm() {
 
   return (
     <div className="w-full">
-      <form onSubmit={handleSubmit(onUsernameFormSubmitted)}>
+      <form onSubmit={void handleSubmit(onUsernameFormSubmitted)}>
         <Label>Please chooose a username</Label>
         <div className="flex w-full space-x-2 mt-1">
           <Input {...register("username", { required: true, onChange: () => setMutationError('') })} placeholder="Username" hasError={mutationError || errors?.username ? true : false} />

@@ -13,7 +13,7 @@ export default function Layout(props: LayoutProps) {
   if (status === 'authenticated') {
     if (!session.user.profileComplete) {
       if (router.pathname != '/welcome') {
-        router.push('/welcome');
+        void router.push('/welcome');
       }
     }
   }

@@ -1,5 +1,5 @@
 import { useSession, signOut } from "next-auth/react";
-import Link from "next/link";
+import { useRouter } from "next/router";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -12,6 +12,7 @@ import { Icons } from "@/ui/primitives/icons";
 
 export default function AuthDropdown() {
   const { data: session } = useSession();
+  const router = useRouter();
 
   return (
     <DropdownMenu>
@@ -21,17 +22,17 @@ export default function AuthDropdown() {
 
       <DropdownMenuContent className="w-64" align="end" sideOffset={25}>
         <DropdownMenuLabel className="text-right">
-          <p>My Account</p>
-          <p className="mt-1 text-slate-500">{session?.user?.email}</p>
+          <p className="text-sm text-slate-500 font-normal">{session?.user?.email}</p>
         </DropdownMenuLabel>
         <DropdownMenuSeparator />
-        <DropdownMenuItem className="justify-end">
-          <Link className="block" href="/settings"> 
-            Settings
-          </Link>
+        <DropdownMenuItem className="justify-end" onSelect={() => void router.push('/profile')}>
+          Profile
+        </DropdownMenuItem>
+        <DropdownMenuItem className="justify-end" onSelect={() => void router.push('/settings')}>
+          Settings
         </DropdownMenuItem>
         <DropdownMenuSeparator />
-        <DropdownMenuItem className="justify-end" onSelect={() => { signOut({ callbackUrl: '/auth/sign-in', redirect: false }) } }>
+        <DropdownMenuItem className="justify-end" onSelect={() => { void signOut({ callbackUrl: '/auth/sign-in', redirect: false }) } }>
           <Icons.logout className="mr-2 h-4 w-4" />
           <span>Logout</span>
         </DropdownMenuItem>
