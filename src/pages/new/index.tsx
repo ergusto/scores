@@ -1,6 +1,6 @@
-import { useNewGameState } from "@/state/newGame";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
+import { useNewGameState } from "@/ui/state/newGame";
 import PageContainer from "@/ui/components/page-container"
 import { NewGameNav, StepOne, StepTwo, StepThree } from "@/ui/components/new-game";
 import { type Step } from "@/ui/components/new-game/types";
@@ -33,7 +33,7 @@ export default function NewGameLayout() {
   }
 
 	return (
-    <PageContainer>
+    <PageContainer hasSidebar={true}>
       <NewGameNav steps={steps} />
 			<main className="flex flex-col flex-1 w-full overflow-hidden">
 				<div className="items-start grid gap-8">

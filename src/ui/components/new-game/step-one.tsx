@@ -1,5 +1,5 @@
 import { Input, Button } from "@/ui/primitives";
-import { useNewGameState, useNewGameStepProgress } from "@/state/newGame";
+import { useNewGameState, useNewGameCanContinue } from "@/ui/state/newGame";
 import { getUsersByUsername } from "@/queries/users";
 import UserSearchForm from "../user-search-form";
 import type { SimpleUser } from "@/types";
@@ -16,8 +16,7 @@ export default function NewGameStepOne() {
   const userQueries = getUsersByUsername(selectedUserUsernames);
   const userList = userQueries.map(query => query.data) as SimpleUser[];
 
-  const canContinueMap = useNewGameStepProgress();
-  const canContinue = canContinueMap[currentStep];
+  const canContinue = useNewGameCanContinue();
 
   return (
     <div className="grid grid-cols-1 lg:grid-cols-2 gap-10">

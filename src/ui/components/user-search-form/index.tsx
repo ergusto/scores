@@ -52,6 +52,7 @@ export default function UserSearchForm({ users, onSelect, onRemove }: UserSearch
   };
 
   const onSubmit = async () => {
+    if (!searchString.length) return;
     await refetch();
     if (data) {
       onSelect(data);
@@ -82,7 +83,7 @@ export default function UserSearchForm({ users, onSelect, onRemove }: UserSearch
           <ul className="flex flex-col divide-y w-full divide-gray-200 border-gray-200 border rounded-md shadow">
             {users.map(user => {
               return (
-                <li key={user.id} className="py-3 px-4">
+                <li key={user?.id} className="py-3 px-4">
                   <UserSearchFormItem user={user} onRemove={(user: ExtendedUser) => onRemove(user)} />
                 </li>
               );

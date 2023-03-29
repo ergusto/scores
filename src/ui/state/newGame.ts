@@ -70,9 +70,7 @@ export const useNewGameCanContinue = () => useNewGameStore(
       canContinue = !!title.length && !!selectedUserUsernames.length;
     }
 
-    return {
-      canContinue
-    };
+    return canContinue;
   },
   shallow
 );

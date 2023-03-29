@@ -17,7 +17,7 @@ export default function AuthDropdown() {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger>
-        {session?.user?.username ?? session?.user?.email}
+        Menu
       </DropdownMenuTrigger>
 
       <DropdownMenuContent className="w-64" align="end" sideOffset={25}>

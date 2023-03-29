@@ -1,6 +1,6 @@
 import { cn } from "@/lib/utils"
 import { type Step } from "./types";
-import { useNewGameState, useNewGameStepProgress } from "@/state/newGame";
+import { useNewGameState, useNewGameStepProgress } from "@/ui/state/newGame";
 
 interface NewGameNavProps {
   steps: Step[];  

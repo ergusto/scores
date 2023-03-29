@@ -5,7 +5,7 @@ import { Tooltip, TooltipContent, TooltipTrigger, TooltipProvider, TooltipArrow 
 
 export default function UserSearchFormItem({ user, onRemove }: { user: ExtendedUser, onRemove: (user: ExtendedUser) => void }) {
   const { data: session } = useSession();
-  const histories = user.reverseOpponentHistories;
+  const histories = user?.reverseOpponentHistories;
   let history = null;
 
   if (histories) {
@@ -20,18 +20,18 @@ export default function UserSearchFormItem({ user, onRemove }: { user: ExtendedU
         </div>
         <div className="flex-1 min-w-0">
             <p className="text-sm font-medium text-gray-900 truncate">
-              {user.username}
+              {user?.username}
             </p>
             <div className="flex flex-row justify-between items-center w-20 text-xs text-gray-500">
               <span className="text-gren-700">{history?.gamesWon}</span>
-              <span> - </span>
+              <span>/</span>
               <span className="text-red-700">{history?.gamesLost}</span>
-              <span> - </span>
+              <span>/</span>
               <span className="mr-1">{history?.gamesPlayed}</span>
               <TooltipProvider>
                 <Tooltip>
                   <TooltipTrigger>
-                    <Icons.help size={16} className="inline" />
+                    <Icons.help size={16} className="opacity-45 hover:opacity-100 inline" />
                   </TooltipTrigger>
                   <TooltipContent>
                     <TooltipArrow />
@@ -43,7 +43,7 @@ export default function UserSearchFormItem({ user, onRemove }: { user: ExtendedU
         </div>
         <div className="inline-flex items-center text-base font-semibold text-gray-900">
           <a onClick={() => onRemove(user)}>
-            <Icons.close size="20" className="opacity-50 hover:opacity-100 cursor-pointer" />
+            <Icons.closeCircle size="20" className="opacity-25 hover:opacity-100 cursor-pointer" />
           </a>
         </div>
     </div>

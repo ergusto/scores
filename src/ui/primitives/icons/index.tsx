@@ -18,6 +18,7 @@ import {
   ArrowLeft,
   Sun,
   X,
+  XCircle,
   type Icon as LucideIcon,
 } from "lucide-react"
 
@@ -26,6 +27,7 @@ export type Icon = LucideIcon;
 export const Icons = {
   logo: Dices,
   close: X,
+  closeCircle: XCircle,
   spinner: Loader2,
   chevronLeft: ChevronLeft,
   chevronRight: ChevronRight,
