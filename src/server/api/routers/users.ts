@@ -10,7 +10,7 @@ import { type ExtendedUser } from "@/types";
 
 export const userRouter = createTRPCRouter({
   setUsername: protectedProcedure
-    .input(z.object({ username: z.string() }))
+    .input(z.object({ username: z.string().min(4) }))
     .mutation(async ({ ctx, input }) => {
       const username = input?.username?.toLowerCase().trim();
       const user = ctx.session.user;

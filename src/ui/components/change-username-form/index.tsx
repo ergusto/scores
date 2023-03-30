@@ -34,7 +34,7 @@ export default function UsernameForm() {
       <form onSubmit={void handleSubmit(onUsernameFormSubmitted)}>
         <Label>Please chooose a username</Label>
         <div className="flex w-full space-x-2 mt-1">
-          <Input {...register("username", { required: true, onChange: () => setMutationError('') })} placeholder="Username" hasError={mutationError || errors?.username ? true : false} />
+          <Input {...register("username", { minLength: 4, required: true, onChange: () => setMutationError('') })} placeholder="Username" hasError={mutationError || errors?.username ? true : false} />
           <Button type="submit" disabled={isLoading}>Submit</Button>
         </div>
         {mutationError && <p className="text-sm mt-2 text-red-500">{mutationError}</p> || errors?.username?.type === 'required' && <p className="text-sm mt-2 text-red-500">Username is required</p>}
