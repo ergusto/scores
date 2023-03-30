@@ -1,8 +1,12 @@
 export type CurrentStepType = 1 | 2 | 3;
 
-export type FirstToGameType = "FIRST_TO";
+export const FIRST_TO = "FIRST_TO";
 
-export type ScoreAfterGameType = "SCORE_AFTER";
+export const SCORE_AFTER = "SCORE_AFTER";
+
+export type FirstToGameType = typeof FIRST_TO;
+
+export type ScoreAfterGameType = typeof SCORE_AFTER;
 
 export type GameTypeType = FirstToGameType | ScoreAfterGameType;
 

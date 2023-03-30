@@ -79,7 +79,7 @@ export default function UserSearchForm({ users, onSelect, onRemove }: UserSearch
       </form>
       {!!users?.length && (
         <div className="w-full">
-          <h3 className="block mt-6 mb-4 text-sm font-medium text-gray-900">Opponents</h3>
+          <h3 className="block mt-6 mb-2 text-sm font-medium text-gray-900">Opponents</h3>
           <ul className="flex flex-col divide-y w-full divide-gray-200 border-gray-200 border rounded-md shadow">
             {users.map(user => {
               return (

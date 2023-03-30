@@ -8,7 +8,7 @@ import type { CurrentStepType, GameTypeType } from "@/ui/components/new-game/typ
 interface NewGameState {
   currentStep: CurrentStepType;
   title: string;
-  gameType: GameTypeType;
+  gameType: GameTypeType | null;
   gameTypeMeta: number | null;
   selectedUserUsernames: string[];
   actions: {
@@ -25,7 +25,7 @@ const useNewGameStore = create(
   immer<NewGameState>((set) => ({
     currentStep: 1,
     title: "",
-    gameType: "ft",
+    gameType: null,
     gameTypeMeta: null,
     selectedUserUsernames: [],
     actions: {
@@ -63,11 +63,15 @@ export const useNewGameState = () => useNewGameStore(
 
 export const useNewGameCanContinue = () => useNewGameStore(
   state => {
-    const { currentStep, title, selectedUserUsernames } = state;
+    const { currentStep, title, selectedUserUsernames, gameType, gameTypeMeta } = state;
     let canContinue = false;
 
     if (currentStep === 1) {
       canContinue = !!title.length && !!selectedUserUsernames.length;
+    }
+
+    if (currentStep === 2) {
+      canContinue = !!gameType && !!gameTypeMeta;
     }
 
     return canContinue;
@@ -81,12 +85,15 @@ interface ProgressMap {
 
 export const useNewGameStepProgress = () => useNewGameStore(
   state => {
-    const { title, selectedUserUsernames } = state;
+    const { title, selectedUserUsernames, gameType, gameTypeMeta } = state;
+
+    const step2CanContinue = !!title.length && !!selectedUserUsernames.length,
+      step3CanContinue = !!gameType && !!gameTypeMeta;
 
     const progressMap: ProgressMap = {
       1: true,
-      2: !!title.length && !!selectedUserUsernames.length,
-      3: false,
+      2: step2CanContinue,
+      3: step2CanContinue && step3CanContinue,
     };
 
     return progressMap;
