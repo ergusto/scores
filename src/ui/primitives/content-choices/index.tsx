@@ -3,6 +3,7 @@ type ContentChoice = {
   title: string;
   text: string;
   callback: () => void;
+  isActive: boolean;
 }
 
 type ContentChoiceProps = {

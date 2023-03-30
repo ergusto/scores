@@ -1,3 +1,4 @@
+import { ChangeEvent } from "react";
 import { Input, Button } from "@/ui/primitives";
 import { useNewGameState, useNewGameCanContinue } from "@/ui/state/newGame";
 import { ContentChoices } from "@/ui/primitives/content-choices";
@@ -17,12 +18,14 @@ export default function NewGameStepTwo() {
     id: FIRST_TO,
     title: 'First to',
     text: 'First player to this score wins the game',
+    isActive: gameType === FIRST_TO,
     callback: () => actions.setGameType(FIRST_TO),
   };
   const score_after = {
     id: SCORE_AFTER,
     title: 'Score after',
     text: 'Player with the highest score after this number of hands wins',
+    isActive: gameType === SCORE_AFTER,
     callback: () => actions.setGameType(SCORE_AFTER),
   };
 
@@ -32,6 +35,10 @@ export default function NewGameStepTwo() {
     if (event.key === "Enter" && canContinue) {
       actions.setCurrentStep((1 + currentStep as CurrentStepType));
     }
+  };
+
+  const onChange = (value: number) => {
+    actions.setGameTypeMeta(value);
   };
 
   const gameTypeMetaLabel = gameType === FIRST_TO ? 'Score to reach' : 'Number of hands to play';
@@ -47,7 +54,7 @@ export default function NewGameStepTwo() {
         </div>
         <div className="mb-6 max-w-2xl">
 					<label htmlFor="game_type_meta" className="block mb-2 text-sm font-medium text-gray-900">{gameTypeMetaLabel}</label>
-					<Input value={gameTypeMeta} onKeyUp={onKeyUp} onChange={event => actions.setGameTypeMeta(event.target.value)} type="number" id="title" placeholder={gameTypeMetaLabel} />
+					<Input value={gameTypeMeta} onKeyUp={onKeyUp} onChange={(event: ChangeEvent<HTMLInputElement>): void => onChange(event.target.value)} type="number" id="title" placeholder={gameTypeMetaLabel} />
         </div>
         <div className="mb-6">
           <Button onClick={() => actions.setCurrentStep((1 + currentStep as CurrentStepType))} disabled={!canContinue}>
