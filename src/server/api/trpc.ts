@@ -88,6 +88,13 @@ const t = initTRPC.context<typeof createTRPCContext>().create({
 export const createTRPCRouter = t.router;
 
 /**
+ * Use this to merge routers into a flat structure
+ *
+ * @see https://trpc.io/docs/server/merging-routers
+ */
+export const mergeRouters = t.mergeRouters;
+
+/**
  * Public (unauthenticated) procedure
  *
  * This is the base piece you use to build new queries and mutations on your tRPC API. It does not

@@ -10,12 +10,13 @@ Tech used for this app:
 
 * Next.js
 * React
-* Tailwindcss
+* TailwindCSS
 * Prisma
 * Trpc
-* Next-auth
+* NextAuth
 * zustand
 * zod
 * React-hook-form
+* Supabase
 
 Among others. 

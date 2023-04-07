@@ -1,8 +1,8 @@
 import Head from "next/head";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
-import PageContainer from '@/ui/components/page-container'
-import PageLoader from "@/ui/components/page-loader";
+import PageContainer from "@/ui/components/page-container";
+import Dashboard from "@/ui/components/dashboard";
 
 export default function Home() {
   const { status } = useSession();
@@ -20,9 +20,8 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <PageContainer hasSidebar={false} fullHeight={true}>
-        {status === 'loading' && <PageLoader />}
-        {status !== 'loading' && <div>Dashboard</div>}
+      <PageContainer hasSidebar={false} fullHeight={false}>
+        <Dashboard />
       </PageContainer>
     </>
   );

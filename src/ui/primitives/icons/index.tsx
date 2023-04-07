@@ -1,5 +1,6 @@
 import {
   Check,
+  CheckCircle,
   ChevronLeft,
   ChevronRight,
   Dices,
@@ -10,6 +11,7 @@ import {
   Trash,
   Settings,
   Search,
+  Slash,
   MoreVertical,
   Plus,
   AlertTriangle,
@@ -20,7 +22,7 @@ import {
   X,
   XCircle,
   type Icon as LucideIcon,
-} from "lucide-react"
+} from "lucide-react";
 
 export type Icon = LucideIcon;
 
@@ -42,7 +44,9 @@ export const Icons = {
   help: HelpCircle,
   home: Home,
   check: Check,
+  checkCircle: CheckCircle,
   logout: LogOut,
-  sun: Sun,
   search: Search,
+  slash: Slash,
+  sun: Sun,
 };

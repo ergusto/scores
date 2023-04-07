@@ -13,7 +13,7 @@ export default function UserSearchFormItem({ user, onRemove }: { user: ExtendedU
   }
 
   return (
-    <div className="flex items-center space-x-4">
+    <div className="py-3 px-4 flex items-center space-x-4 shadow rounded-md border-grey-200 border">
         <div className="flex-shrink-0">
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img className="w-10 h-10 rounded-full" src="https://flowbite.com/docs/images/people/profile-picture-1.jpg" alt="Neil image" />
@@ -27,15 +27,16 @@ export default function UserSearchFormItem({ user, onRemove }: { user: ExtendedU
               <span>/</span>
               <span className="text-red-700">{history?.gamesLost}</span>
               <span>/</span>
-              <span className="mr-1">{history?.gamesPlayed}</span>
+              <span className="mr-0.5">{history?.gamesPlayed}</span>
               <TooltipProvider>
                 <Tooltip>
                   <TooltipTrigger>
-                    <Icons.help size={16} className="opacity-45 hover:opacity-100 inline" />
+                    <Icons.help size={14} className="opacity-45 hover:opacity-100 inline" />
                   </TooltipTrigger>
                   <TooltipContent>
                     <TooltipArrow />
-                    Wins / Losses / Total Games Played
+                    <p className="font-semibold text-xs text-center">History against {user?.username}</p>
+                    <p className="text-xs">Wins / Losses / Total Games Played</p>
                   </TooltipContent>
                 </Tooltip>
               </TooltipProvider>

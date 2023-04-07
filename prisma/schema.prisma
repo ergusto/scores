@@ -66,6 +66,7 @@ model User {
   gameUserOrders           GameUserOrder[]
   opponentHistories        OpponentHistory[] @relation("OpponentHistories")
   reverseOpponentHistories OpponentHistory[] @relation("ReverseOpponetHistories")
+  ownedGames               Game[]            @relation("OwnedGames")
 }
 
 model VerificationToken {
@@ -92,33 +93,35 @@ model OpponentHistory {
   opponent      User   @relation(name: "ReverseOpponetHistories", fields: [opponentId], references: [id])
   userId        String
   opponentId    String
-  handsPlayed   Int?    @default(0)
-  handsWon      Int?    @default(0)
-  handsLost     Int?    @default(0)
-  gamesPlayed   Int?    @default(0)
-  gamesWon      Int?    @default(0)
-  gamesLost     Int?    @default(0)
-  matchesPlayed Int?    @default(0)
-  matchesWon    Int?    @default(0)
-  matchesLost   Int?    @default(0)
+  handsPlayed   Int?   @default(0)
+  handsWon      Int?   @default(0)
+  handsLost     Int?   @default(0)
+  gamesPlayed   Int?   @default(0)
+  gamesWon      Int?   @default(0)
+  gamesLost     Int?   @default(0)
+  matchesPlayed Int?   @default(0)
+  matchesWon    Int?   @default(0)
+  matchesLost   Int?   @default(0)
 }
 
 model Game {
-  id           String   @id @default(cuid())
-  createdAt    DateTime @default(now())
-  updatedAt    DateTime @updatedAt
-  startedAt    DateTime
-  endedAt      DateTime
-  lastActivity DateTime
-  users        User[]   @relation(name: "Games")
-  winner       User?    @relation(name: "WonGames", fields: [winnerUserId], references: [id])
-  winnerUserId String?
-  match        Match?   @relation(fields: [matchId], references: [id])
+  id           String    @id @default(cuid())
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+  startedAt    DateTime?
+  endedAt      DateTime?
+  lastActivity DateTime?
+  owner        User?     @relation(name: "OwnedGames", fields: [ownerId], references: [id])
+  ownerId      String
+  users        User[]    @relation(name: "Games")
+  winner       User?     @relation(name: "WonGames", fields: [winnerId], references: [id])
+  winnerId     String?
+  match        Match?    @relation(fields: [matchId], references: [id])
   matchId      String?
   title        String
-  active       Boolean  @default(true)
-  gameType     GameType @default(FIRST_TO)
-  gameTypeMeta Int
+  active       Boolean   @default(true)
+  gameType     GameType  @default(FIRST_TO)
+  gameTypeMeta Int?
   hands        Hand[]
 }
 

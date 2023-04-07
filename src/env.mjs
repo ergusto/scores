@@ -19,6 +19,8 @@ const server = z.object({
     process.env.VERCEL ? z.string().min(1) : z.string().url(),
   ),
   // Add `.min(1) on ID and SECRET if you want to make sure they're not empty
+  EMAIL_SERVER: z.string(),
+  EMAIL_FORM: z.string(),
 });
 
 /**
@@ -40,6 +42,8 @@ const processEnv = {
   NODE_ENV: process.env.NODE_ENV,
   NEXTAUTH_SECRET: process.env.NEXTAUTH_SECRET,
   NEXTAUTH_URL: process.env.NEXTAUTH_URL,
+  EMAIL_SERVER: process.env.EMAIL_SERVER,
+  EMAIL_FORM: process.env.EMAIL_FORM,
   // NEXT_PUBLIC_CLIENTVAR: process.env.NEXT_PUBLIC_CLIENTVAR,
 };
 
