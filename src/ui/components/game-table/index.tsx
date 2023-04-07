@@ -2,15 +2,16 @@ import type { MouseEvent } from "react";
 import { useRouter } from "next/router";
 import type { Game } from "@prisma/client";
 import GameItem from "./item";
+import Skeleton from "./skeleton";
 
 interface GameTableProps {
   games?: Game[];
   isLoading: boolean;
 }
 
-export default function GameTable({ games }: GameTableProps) {
-  if (!games) {
-    return null;
+export default function GameTable({ games, isLoading }: GameTableProps) {
+  if (!games || isLoading) {
+    return <Skeleton />;
   }
 
   const router = useRouter();
@@ -18,7 +19,7 @@ export default function GameTable({ games }: GameTableProps) {
   return (
     <div className="mt-4 overflow-hidden rounded-md border border-slate-200">
       <table className="w-full text-left text-sm text-gray-500">
-        <thead className="bg-gray-50 text-xs uppercase text-gray-700">
+        <thead className="bg-gray-50 text-xs uppercase border-b border-slate-200 text-gray-700">
           <tr>
             <th scope="col" className="px-4 py-4">
               Title

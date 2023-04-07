@@ -20,7 +20,7 @@ export default function GameTableItem({ game }: GameTableItemProps) {
 
   return (
     <>
-      <td className="px-4 py-3">{game.title}</td>
+      <td className="px-4 py-3 text-base">{game.title}</td>
       <td className="px-4 py-3">{getUsernames(game.users, session?.user)}</td>
       <td className="px-4 py-3">
         {game.active ? (
