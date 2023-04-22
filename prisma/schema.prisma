@@ -2,7 +2,8 @@
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
 generator client {
-  provider = "prisma-client-js"
+  provider        = "prisma-client-js"
+  previewFeatures = ["extendedWhereUnique"]
 }
 
 datasource db {
@@ -105,42 +106,47 @@ model OpponentHistory {
 }
 
 model Game {
-  id           String    @id @default(cuid())
-  createdAt    DateTime  @default(now())
-  updatedAt    DateTime  @updatedAt
+  id           String          @id @default(cuid())
+  createdAt    DateTime        @default(now())
+  updatedAt    DateTime        @updatedAt
   startedAt    DateTime?
   endedAt      DateTime?
   lastActivity DateTime?
-  owner        User?     @relation(name: "OwnedGames", fields: [ownerId], references: [id])
+  owner        User?           @relation(name: "OwnedGames", fields: [ownerId], references: [id])
   ownerId      String
-  users        User[]    @relation(name: "Games")
-  winner       User?     @relation(name: "WonGames", fields: [winnerId], references: [id])
+  users        User[]          @relation(name: "Games")
+  winner       User?           @relation(name: "WonGames", fields: [winnerId], references: [id])
   winnerId     String?
-  match        Match?    @relation(fields: [matchId], references: [id])
+  match        Match?          @relation(fields: [matchId], references: [id])
   matchId      String?
   title        String
-  active       Boolean   @default(true)
-  gameType     GameType  @default(FIRST_TO)
+  active       Boolean         @default(true)
+  gameType     GameType        @default(FIRST_TO)
   gameTypeMeta Int?
   hands        Hand[]
+  order        GameUserOrder[]
+  gameScores   GameScore[]
 }
 
 model Hand {
-  id        String   @id @default(cuid())
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  game      Game     @relation(fields: [gameId], references: [id])
+  id        String      @id @default(cuid())
+  createdAt DateTime    @default(now())
+  updatedAt DateTime    @updatedAt
+  game      Game        @relation(fields: [gameId], references: [id])
   gameId    String
-  dealer    User?    @relation(name: "DealtHands", fields: [dealerId], references: [id])
+  dealer    User?       @relation(name: "DealtHands", fields: [dealerId], references: [id])
   dealerId  String?
-  winner    User?    @relation(name: "WonHands", fields: [winnerId], references: [id])
+  winner    User?       @relation(name: "WonHands", fields: [winnerId], references: [id])
   winnerId  String?
+  scores    HandScore[]
 }
 
 model HandScore {
   id     String @id @default(cuid())
   user   User   @relation(fields: [userId], references: [id])
   userId String
+  hand   Hand   @relation(fields: [handId], references: [id])
+  handId String
   score  Int
 }
 
@@ -148,11 +154,18 @@ model GameScore {
   id     String @id @default(cuid())
   user   User   @relation(fields: [userId], references: [id])
   userId String
+  game   Game   @relation(fields: [gameId], references: [id])
+  gameId String
+  score  Int    @default(0)
+
+  @@unique([userId, gameId])
 }
 
 model GameUserOrder {
   id     String @id @default(cuid())
   user   User   @relation(fields: [userId], references: [id])
   userId String
+  game   Game   @relation(fields: [gameId], references: [id])
+  gameId String
   order  Int
 }

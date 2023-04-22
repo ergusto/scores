@@ -1,20 +1,15 @@
 import { create } from "zustand";
 import { immer } from "zustand/middleware/immer";
 import { shallow } from "zustand/shallow";
+import { GameType } from "@prisma/client";
 
 import type { SimpleUser } from "@/types";
 
 export type CurrentStepType = 1 | 2 | 3;
 
-export const FIRST_TO = "FIRST_TO";
+export type FirstToGameType = typeof GameType.FIRST_TO;
 
-export const SCORE_AFTER = "SCORE_AFTER";
-
-export type FirstToGameType = typeof FIRST_TO;
-
-export type ScoreAfterGameType = typeof SCORE_AFTER;
-
-export type GameTypeType = FirstToGameType | ScoreAfterGameType;
+export type ScoreAfterGameType = typeof GameType.SCORE_AFTER;
 
 export type Step = {
   title: string;
@@ -25,13 +20,13 @@ export type Step = {
 interface NewGameState {
   currentStep: CurrentStepType;
   title: string;
-  gameType: GameTypeType | undefined;
+  gameType: GameType;
   gameTypeMeta: number | null;
   selectedUserUsernames: string[];
   actions: {
     setCurrentStep: (currentStep: CurrentStepType) => void;
     setTitle: (title: string) => void;
-    setGameType: (gameType: GameTypeType) => void;
+    setGameType: (gameType: GameType) => void;
     setGameTypeMeta: (gameTypeMeta: number) => void;
     addUser: (user: SimpleUser) => void;
     removeUser: (user: SimpleUser) => void;
@@ -42,7 +37,7 @@ const useNewGameStore = create(
   immer<NewGameState>((set) => ({
     currentStep: 1,
     title: "",
-    gameType: undefined,
+    gameType: GameType.FIRST_TO,
     gameTypeMeta: null,
     selectedUserUsernames: [],
     actions: {
@@ -57,7 +52,7 @@ const useNewGameStore = create(
               (selectedUserUsername) => selectedUserUsername === user.username
             ) === -1
           ) {
-            state.selectedUserUsernames.push(user.username);
+            state.selectedUserUsernames.push(user.username as string);
           }
         });
       },

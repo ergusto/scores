@@ -1,10 +1,7 @@
 import { z } from "zod";
 
 import { TRPCError } from "@trpc/server";
-import {
-  createTRPCRouter,
-  protectedProcedure,
-} from "@/server/api/trpc";
+import { createTRPCRouter, protectedProcedure } from "@/server/api/trpc";
 
 export const userRouter = createTRPCRouter({
   setUsername: protectedProcedure
@@ -16,31 +13,31 @@ export const userRouter = createTRPCRouter({
       if (user.profileComplete) {
         throw new TRPCError({
           code: "BAD_REQUEST",
-          message: "You are not able to change your username at this time."
+          message: "You are not able to change your username at this time.",
         });
       }
 
       const existingUser = await ctx.prisma.user.findFirst({
         where: {
-          username
-        }
+          username,
+        },
       });
 
       if (existingUser) {
         throw new TRPCError({
-          code: 'BAD_REQUEST',
-          message: "That username is not available"
+          code: "BAD_REQUEST",
+          message: "That username is not available",
         });
       }
 
       return await ctx.prisma.user.update({
         where: {
-          id: user.id
+          id: user.id,
         },
         data: {
           username,
-          profileComplete: true
-        }
+          profileComplete: true,
+        },
       });
     }),
 
@@ -53,26 +50,24 @@ export const userRouter = createTRPCRouter({
 
       if (username === ctx.session.user.username) {
         throw new TRPCError({
-          code: 'BAD_REQUEST',
-          message: 'You cannot play a game against yourself',
+          code: "BAD_REQUEST",
+          message: "You cannot play a game against yourself",
         });
       }
 
       return await ctx.prisma.user.findFirstOrThrow({
         where: {
-          username
+          username,
         },
         select: {
           username: true,
           id: true,
           reverseOpponentHistories: {
             where: {
-              userId: ctx.session.user.id
-            }
-          }
+              userId: ctx.session.user.id,
+            },
+          },
         },
       });
     }),
-
 });
-

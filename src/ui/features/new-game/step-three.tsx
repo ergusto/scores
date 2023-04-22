@@ -1,3 +1,4 @@
+import { useRouter } from "next/router";
 import type { SimpleUser } from "@/types";
 import { api } from "@/lib/api";
 import { Button, Icons } from "@/ui/primitives";
@@ -5,13 +6,17 @@ import { getUsersByUsername } from "@/ui/queries/users";
 import { useNewGameState } from "@/ui/state/newGame";
 
 export default function NewGameStepThree() {
+  const router = useRouter();
   const { title, gameType, gameTypeMeta, selectedUserUsernames } =
     useNewGameState();
 
   const userQueries = getUsersByUsername(selectedUserUsernames);
-  const userList = userQueries.map((query) => query.data) as SimpleUser[];
+  const userList = userQueries.map((query) => query.data);
 
   const { mutate, isLoading } = api.game.create.useMutation({
+    onSuccess: (data) => {
+      void router.push(`/games/${data.id}`);
+    },
     onError: (error) => {
       console.log(error);
     },

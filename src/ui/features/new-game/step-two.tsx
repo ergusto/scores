@@ -4,9 +4,8 @@ import {
   useNewGameState,
   useNewGameCanContinue,
   type CurrentStepType,
-  FIRST_TO,
-  SCORE_AFTER,
 } from "@/ui/state/newGame";
+import { GameType } from "@prisma/client";
 import { ContentChoices } from "@/ui/primitives/content-choices";
 
 export default function NewGameStepTwo() {
@@ -15,19 +14,19 @@ export default function NewGameStepTwo() {
   const canContinue = useNewGameCanContinue();
 
   const first_to = {
-    id: FIRST_TO,
+    id: GameType.FIRST_TO,
     title: "First to",
     text: "First player to this score wins the game",
-    isActive: gameType === FIRST_TO,
-    callback: () => actions.setGameType(FIRST_TO),
+    isActive: gameType === GameType.FIRST_TO,
+    callback: () => actions.setGameType(GameType.FIRST_TO),
   };
 
   const score_after = {
-    id: SCORE_AFTER,
+    id: GameType.SCORE_AFTER,
     title: "Score after",
     text: "Player with the highest score after this number of hands wins",
-    isActive: gameType === SCORE_AFTER,
-    callback: () => actions.setGameType(SCORE_AFTER),
+    isActive: gameType === GameType.SCORE_AFTER,
+    callback: () => actions.setGameType(GameType.SCORE_AFTER),
   };
 
   const choices = [first_to, score_after];
@@ -45,7 +44,9 @@ export default function NewGameStepTwo() {
   };
 
   const gameTypeMetaLabel =
-    gameType === FIRST_TO ? "Score to reach" : "Number of hands to play";
+    gameType === GameType.FIRST_TO
+      ? "Score to reach"
+      : "Number of hands to play";
 
   return (
     <div className="grid grid-cols-1 gap-10">

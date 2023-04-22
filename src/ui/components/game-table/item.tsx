@@ -10,8 +10,8 @@ interface GameTableItemProps {
 
 function getUsernames(users: SimpleUser[], authUser: SimpleUser) {
   return users
-    .filter((user) => user.username !== authUser.username)
-    .map((user) => user.username)
+    .filter((user) => user?.username !== authUser?.username)
+    .map((user) => user?.username)
     .join(", ");
 }
 

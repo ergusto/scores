@@ -1,38 +1,64 @@
-import { Prisma, type OpponentHistory } from "@prisma/client";
+import { Prisma } from "@prisma/client";
 
-export type SimpleUser = {
-  id: string;
-  username: string;
-  image?: string;
+const selectSimpleUserFields = {
+  select: { id: true, username: true, image: true },
 };
 
-export type ExtendedUser = SimpleUser & {
-  reverseOpponentHistories?: OpponentHistory[];
-};
+const simpleUser = Prisma.validator<Prisma.UserArgs>()(selectSimpleUserFields);
 
-enum GameType {
-  FIRST_TO,
-  SCORE_AFTER,
-}
+export type SimpleUser = Prisma.UserGetPayload<typeof simpleUser>;
 
-export type Game = {
-  id: string;
-  active: boolean;
-  createdAt: Date;
-  endedAt?: Date;
-  gameType: GameType;
-  gameTypeMeta: number;
-  lastActivity?: Date;
-  match?: null;
-  matchId?: string;
-  owner: SimpleUser;
-  ownerId: string;
-  startedAt?: Date;
-  title: string;
-  updatedAt?: Date;
-  users: SimpleUser[];
-  winner: SimpleUser;
-  winnerId: string;
-};
+const userWithOpponents = Prisma.validator<Prisma.UserArgs>()({
+  select: {
+    id: true,
+    username: true,
+    image: true,
+    reverseOpponentHistories: true,
+  },
+});
 
-export type GameWithUsers = Prisma.validator;
+export type UserWithOpponents = Prisma.UserGetPayload<typeof userWithOpponents>;
+
+const gameWithUsers = Prisma.validator<Prisma.GameArgs>()({
+  include: {
+    users: selectSimpleUserFields,
+    winner: selectSimpleUserFields,
+    owner: selectSimpleUserFields,
+  },
+});
+
+export type GameWithUsers = Prisma.GameGetPayload<typeof gameWithUsers>;
+
+const handScoreWithUser = Prisma.validator<Prisma.HandScoreArgs>()({
+  select: {
+    score: true,
+    user: {
+      select: {
+        id: true,
+      },
+    },
+  },
+});
+
+export type HandScoreWithUser = Prisma.HandScoreGetPayload<
+  typeof handScoreWithUser
+>;
+
+const handWithScoresAndUsers = Prisma.validator<Prisma.HandArgs>()({
+  include: {
+    scores: {
+      include: {
+        user: {
+          select: {
+            id: true,
+            username: true,
+          },
+        },
+      },
+    },
+  },
+});
+
+export type HandWithScoresAndUsers = Prisma.HandGetPayload<
+  typeof handWithScoresAndUsers
+>;

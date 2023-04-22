@@ -2,7 +2,7 @@ import type { KeyboardEvent } from "react";
 import { Input, Button } from "@/ui/primitives";
 import { useNewGameState, useNewGameCanContinue } from "@/ui/state/newGame";
 import { getUsersByUsername } from "@/ui/queries/users";
-import UserSearchForm from "../user-search-form";
+import UserSearchForm from "@/ui/components/user-search-form";
 import type { SimpleUser } from "@/types";
 import type { CurrentStepType } from "@/ui/state/newGame";
 

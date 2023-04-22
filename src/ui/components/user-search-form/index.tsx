@@ -4,13 +4,13 @@ import { getQueryKey } from "@trpc/react-query";
 import { useQueryClient } from "@tanstack/react-query";
 import { api } from "@/lib/api";
 import { Button, Input, Icons } from "@/ui/primitives";
-import type { ExtendedUser } from "@/types";
+import type { UserWithOpponents } from "@/types";
 import UserSearchFormItem from "./item";
 
 interface UserSearchFormProps {
-  onSelect: (user: ExtendedUser) => void;
-  users: ExtendedUser[];
-  onRemove: (user: ExtendedUser) => void;
+  onSelect: (user: UserWithOpponents) => void;
+  users: UserWithOpponents[];
+  onRemove: (user: UserWithOpponents) => void;
 }
 
 type FormValues = {
@@ -47,7 +47,7 @@ export default function UserSearchForm({
           setError("An error occurred");
         }
       },
-      onSuccess: (data: ExtendedUser) => {
+      onSuccess: (data: UserWithOpponents) => {
         onSelect(data);
         resetForm();
       },
@@ -112,7 +112,7 @@ export default function UserSearchForm({
                 <li key={user?.id} className="">
                   <UserSearchFormItem
                     user={user}
-                    onRemove={(user: ExtendedUser) => onRemove(user)}
+                    onRemove={(user: UserWithOpponents) => onRemove(user)}
                   />
                 </li>
               );

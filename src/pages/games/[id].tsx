@@ -1,17 +1,20 @@
 import { useRouter } from "next/router";
-import { api } from "@/lib/api";
+import PageContainer from "@/ui/components/page-container";
+import GameDetailFeature from "@/ui/features/game-detail";
+import { useSession } from "next-auth/react";
 
 export default function GameDetailPage() {
+  const { status } = useSession();
   const router = useRouter();
   const { id } = router.query;
 
-  const { data, isLoading } = api.game.get.useQuery({ id });
-
-  console.log(data);
+  if (status === "unauthenticated") {
+    void router.push("/auth/sign-in");
+  }
 
   return (
-    <div>
-      <h1>Game Detail</h1>
-    </div>
+    <PageContainer hasSidebar={false} fullHeight={false}>
+      <GameDetailFeature id={id} />
+    </PageContainer>
   );
 }

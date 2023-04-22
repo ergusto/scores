@@ -2,7 +2,7 @@ import Head from "next/head";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
 import PageContainer from "@/ui/components/page-container";
-import Dashboard from "@/ui/components/dashboard";
+import Dashboard from "@/ui/features/dashboard";
 
 export default function Home() {
   const { status } = useSession();
