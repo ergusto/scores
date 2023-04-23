@@ -29,6 +29,33 @@ const gameWithUsers = Prisma.validator<Prisma.GameArgs>()({
 
 export type GameWithUsers = Prisma.GameGetPayload<typeof gameWithUsers>;
 
+const gameWithUsersScoresHandsAndOrder = Prisma.validator<Prisma.GameArgs>()({
+  include: {
+    users: selectSimpleUserFields,
+    winner: selectSimpleUserFields,
+    owner: selectSimpleUserFields,
+    scores: {
+      select: {
+        id: true,
+        score: true,
+        user: selectSimpleUserFields,
+      },
+    },
+    hands: {
+      include: {
+        scores: true,
+      }
+    },
+    order: {
+      include: {
+        user: selectSimpleUserFields
+      }
+    }
+  }
+});
+
+export type GameWithUsersScoresHandsAndOrder = Prisma.GameGetPayload<typeof gameWithUsersScoresHandsAndOrder>;
+
 const handScoreWithUser = Prisma.validator<Prisma.HandScoreArgs>()({
   select: {
     score: true,
@@ -48,12 +75,7 @@ const handWithScoresAndUsers = Prisma.validator<Prisma.HandArgs>()({
   include: {
     scores: {
       include: {
-        user: {
-          select: {
-            id: true,
-            username: true,
-          },
-        },
+        user: selectSimpleUserFields,
       },
     },
   },
@@ -61,4 +83,14 @@ const handWithScoresAndUsers = Prisma.validator<Prisma.HandArgs>()({
 
 export type HandWithScoresAndUsers = Prisma.HandGetPayload<
   typeof handWithScoresAndUsers
+>;
+
+const gameUserOrder = Prisma.validator<Prisma.GameUserOrderArgs>()({
+  include: {
+    user: selectSimpleUserFields,
+  }
+});
+
+export type GameUserOrder = Prisma.GameUserOrderGetPayload<
+  typeof gameUserOrder
 >;

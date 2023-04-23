@@ -125,7 +125,7 @@ model Game {
   gameTypeMeta Int?
   hands        Hand[]
   order        GameUserOrder[]
-  gameScores   GameScore[]
+  scores       GameScore[]
 }
 
 model Hand {

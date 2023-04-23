@@ -9,27 +9,19 @@ const gameDetailProcedure = protectedProcedure.input(
   })
 );
 
-const simpleUserSelectParams = {
-  username: true,
-  id: true,
-  image: true,
+const selectSimpleUserFields = {
+  select: { id: true, username: true, image: true },
 };
 
 const gameIncludeParams = {
-  users: {
-    select: simpleUserSelectParams,
-  },
-  winner: true,
-  owner: {
-    select: simpleUserSelectParams,
-  },
+  users: selectSimpleUserFields,
+  winner: selectSimpleUserFields,
+  owner: selectSimpleUserFields,
   scores: {
     select: {
       id: true,
       score: true,
-      user: {
-        select: simpleUserSelectParams,
-      },
+      user: selectSimpleUserFields
     },
   },
 };
@@ -74,8 +66,8 @@ export const gameRouter = createTRPCRouter({
       const { title, gameType, gameTypeMeta, usernames } = input,
         ownerId = ctx.session.user.id,
         usernameList = [
-          ...usernames.map((username: string) => ({ username })),
           { username: ctx.session.user.username },
+          ...usernames.map((username: string) => ({ username })),
         ];
 
       const game = ctx.prisma.game.create({
@@ -97,7 +89,7 @@ export const gameRouter = createTRPCRouter({
               };
             }),
           },
-          gameScores: {
+          scores: {
             create: usernameList.map((user) => ({
               user: {
                 connect: user,
@@ -124,9 +116,7 @@ export const gameRouter = createTRPCRouter({
         },
         order: {
           include: {
-            user: {
-              select: simpleUserSelectParams,
-            },
+            user: selectSimpleUserFields
           },
         },
       },

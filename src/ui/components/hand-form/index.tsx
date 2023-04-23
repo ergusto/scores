@@ -1,11 +1,12 @@
 import { api } from "@/lib/api";
-import type { SimpleUser, GameWithUsers } from "@/types";
+import type { SimpleUser, GameWithUsersScoresHandsAndOrder } from "@/types";
 import { useForm, type SubmitHandler } from "react-hook-form";
 import { Button, Input } from "@/ui/primitives";
-import { GameType } from "@prisma/client";
+import { GameType, GameUserOrder } from "@prisma/client";
+import { gameUserOrderSort } from "@/lib/utils";
 
 interface HandFormProps {
-  game: GameWithUsers;
+  game: GameWithUsersScoresHandsAndOrder | undefined;
   isLoading: boolean;
 }
 
@@ -53,13 +54,17 @@ export default function HandForm({ game }: HandFormProps) {
 
   const { mutate, isLoading } = api.game.recordHand.useMutation({
     onSuccess: () => {
-      void trpcUtils.game.get.invalidate({ id: String(game.id) });
+      void trpcUtils.game.get.invalidate({ id: String(game && game.id) });
       reset();
     },
     onError: (error) => {
       console.log(error);
     },
   });
+
+  if (!game) {
+    return <div />;
+  }
 
   const onSubmit: SubmitHandler<FormValues> = (data) => {
     mutate({
@@ -74,15 +79,12 @@ export default function HandForm({ game }: HandFormProps) {
     });
   };
 
-  if (!game) {
-    return <div />;
-  }
-
   return (
     <div>
       <form onSubmit={(...args) => void handleSubmit(onSubmit)(...args)}>
         <div className="grid auto-cols-auto grid-flow-col gap-4">
-          {game.users.map((user: SimpleUser) => {
+          {game.order.sort(gameUserOrderSort).map((order: GameUserOrder) => {
+            const user = game.users.find(user => user.id === order.userId) as SimpleUser;
             const fieldKey = user?.id;
             const error = errors[fieldKey];
             const username = user?.username;

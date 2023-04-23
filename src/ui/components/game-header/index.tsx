@@ -1,8 +1,8 @@
-import type { GameWithUsers } from "@/types";
 import { GameType } from "@prisma/client";
+import { type GameWithUsersScoresHandsAndOrder } from "@/types";
 
 interface GameHeaderProps {
-  game: GameWithUsers;
+  game: GameWithUsersScoresHandsAndOrder | undefined;
   isLoading: boolean;
 }
 
