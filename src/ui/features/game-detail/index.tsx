@@ -19,12 +19,7 @@ export default function GameDetailFeature({
     <div>
       <GameHeader game={game} isLoading={!game || isLoading} />
       <HandForm game={game} isLoading={!game || isLoading} />
-      <HandList
-        game={game}
-        hands={game?.hands}
-        users={game?.users}
-        isLoading={!game || isLoading}
-      />
+      <HandList game={game} isLoading={!game || isLoading} />
     </div>
   );
 }

@@ -12,6 +12,10 @@ export default function HandList({
   game: Game;
   isLoading: boolean;
 }) {
+  if (!game) {
+    return <div />;
+  }
+
   return (
     <div className="mt-5 w-full rounded-lg border border-slate-300 text-left text-sm text-gray-500 shadow-sm">
       <table className="w-full table-fixed border-collapse border-spacing-0">
@@ -56,7 +60,7 @@ export default function HandList({
         {!!hands.length && (
           <tfoot className="rounded-b-lg border-t border-slate-300 bg-gray-50">
             <tr>
-              {game.gameScores.map((gameScore) => {
+              {game.scores.map((gameScore) => {
                 return (
                   <td
                     key={`tfoot-total-${gameScore.id}`}

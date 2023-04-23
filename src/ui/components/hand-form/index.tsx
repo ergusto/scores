@@ -74,6 +74,10 @@ export default function HandForm({ game }: HandFormProps) {
     });
   };
 
+  if (!game) {
+    return <div />;
+  }
+
   return (
     <div>
       <form onSubmit={(...args) => void handleSubmit(onSubmit)(...args)}>

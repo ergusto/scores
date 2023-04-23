@@ -7,6 +7,10 @@ interface GameHeaderProps {
 }
 
 export default function GameHeader({ game }: GameHeaderProps) {
+  if (!game) {
+    return <div />;
+  }
+
   return (
     <header className="pt-6 pb-10">
       <h1 className="text-3xl font-bold">{game.title}</h1>

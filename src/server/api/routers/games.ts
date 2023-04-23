@@ -23,7 +23,7 @@ const gameIncludeParams = {
   owner: {
     select: simpleUserSelectParams,
   },
-  gameScores: {
+  scores: {
     select: {
       id: true,
       score: true,
