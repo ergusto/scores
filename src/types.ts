@@ -1,5 +1,18 @@
 import { Prisma } from "@prisma/client";
 
+const sessionUser = Prisma.validator<Prisma.UserArgs>()({
+  select: {
+    id: true,
+    username: true,
+    image: true,
+    profileComplete: true,
+    name: true,
+    email: true,
+  }
+});
+
+export type SessionUser = Prisma.UserGetPayload<typeof sessionUser>;
+
 const selectSimpleUserFields = {
   select: { id: true, username: true, image: true },
 };
@@ -93,4 +106,16 @@ const gameUserOrder = Prisma.validator<Prisma.GameUserOrderArgs>()({
 
 export type GameUserOrder = Prisma.GameUserOrderGetPayload<
   typeof gameUserOrder
+>;
+
+const gameScoreWithUser = Prisma.validator<Prisma.GameScoreArgs>()({
+  select: {
+    id: true,
+    score: true,
+    user: selectSimpleUserFields,
+  },
+});
+
+export type GameScoreWithUser = Prisma.GameScoreGetPayload<
+  typeof gameScoreWithUser
 >;

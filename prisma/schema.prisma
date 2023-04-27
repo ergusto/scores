@@ -122,7 +122,7 @@ model Game {
   title        String
   active       Boolean         @default(true)
   gameType     GameType        @default(FIRST_TO)
-  gameTypeMeta Int?
+  gameTypeMeta Int
   hands        Hand[]
   order        GameUserOrder[]
   scores       GameScore[]

@@ -24,5 +24,5 @@ export const useDashboardState = () =>
       searchString: state.searchString,
       actions: state.actions,
     }),
-    shallow
+    shallow,
   );

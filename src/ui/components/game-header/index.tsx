@@ -19,6 +19,7 @@ export default function GameHeader({ game }: GameHeaderProps) {
           ? `First to ${String(game.gameTypeMeta)} points`
           : `Highest score after ${String(game.gameTypeMeta)} hands`}
       </h3>
+      <p>Game is {!!game.active ? 'Active!' : 'Inactive!'}</p>
     </header>
   );
 }

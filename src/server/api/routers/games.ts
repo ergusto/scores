@@ -1,7 +1,8 @@
 import { prisma } from "@/server/db";
 import { z } from "zod";
-import { GameType } from "@prisma/client";
+import { type GameScore, GameType } from "@prisma/client";
 import { createTRPCRouter, protectedProcedure } from "@/server/api/trpc";
+import { GameScoreWithUser } from "@/types";
 
 const gameDetailProcedure = protectedProcedure.input(
   z.object({
@@ -70,7 +71,7 @@ export const gameRouter = createTRPCRouter({
           ...usernames.map((username: string) => ({ username })),
         ];
 
-      const game = ctx.prisma.game.create({
+      return ctx.prisma.game.create({
         data: {
           title,
           gameType,
@@ -98,8 +99,6 @@ export const gameRouter = createTRPCRouter({
           },
         },
       });
-
-      return game;
     }),
 
   get: gameDetailProcedure.query(async ({ ctx, input }) => {
@@ -140,9 +139,16 @@ export const gameRouter = createTRPCRouter({
       const date = new Date();
 
       const game = await ctx.prisma.game.findFirstOrThrow({
-        where: { id: gameId },
+        where: {
+          id: gameId,
+        },
       });
 
+      if (!game.active) {
+        throw new Error("Game is not active");
+      }
+
+      // Don't await this, so we can update in a transaction
       const updateHand = ctx.prisma.hand.create({
         data: {
           game: {
@@ -165,6 +171,7 @@ export const gameRouter = createTRPCRouter({
         },
       });
 
+      // Don't await these, so we can update in a transaction
       const gameScoreQueries = scores.map((data) => {
         const { userId, score } = data;
 
@@ -183,6 +190,7 @@ export const gameRouter = createTRPCRouter({
         });
       });
 
+      // Don't await this, so we can update in a transaction
       const updateGame = ctx.prisma.game.update({
         where: {
           id: gameId,
@@ -191,14 +199,59 @@ export const gameRouter = createTRPCRouter({
           lastActivity: date,
           ...(!game.startedAt && { startedAt: date }),
         },
+        include: {
+          scores: true,
+          hands: true,
+        }
       });
 
       await prisma.$transaction([updateHand, ...gameScoreQueries, updateGame]);
 
-      return await ctx.prisma.game.findFirst({
+      let winning_score = null;
+
+      const updatedGame = await ctx.prisma.game.findFirstOrThrow({
         where: {
           id: gameId,
         },
+        include: {
+          scores: {
+            select: {
+              id: true,
+              score: true,
+              user: selectSimpleUserFields,
+            },
+          },
+          hands: true,
+        }
       });
-    }),
+
+      const sortedScores = updatedGame.scores.sort((a, b) => b.score - a.score) as GameScoreWithUser[];
+
+      if (updatedGame.gameType === GameType.FIRST_TO) {
+        winning_score = sortedScores.find((score: GameScoreWithUser) => score?.score >= updatedGame.gameTypeMeta) as GameScoreWithUser;
+      } else if (updatedGame.gameType === GameType.SCORE_AFTER) {
+        if (updatedGame.hands.length >= updatedGame.gameTypeMeta) {
+          winning_score = sortedScores[0] as GameScoreWithUser;
+        }
+      }
+
+    if (winning_score && winning_score?.user?.id) {   
+      return await ctx.prisma.game.update({
+        where: {
+          id: gameId,
+        },
+        data: {
+          winner: {
+            connect: {
+              id: winning_score.user.id
+            }
+          },
+          endedAt: date,
+          active: false,
+        },
+      });
+    } else {
+      return updatedGame;
+    }
+  }),
 });

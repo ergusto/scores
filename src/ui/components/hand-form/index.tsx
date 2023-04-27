@@ -8,6 +8,7 @@ import { gameUserOrderSort } from "@/lib/utils";
 interface HandFormProps {
   game: GameWithUsersScoresHandsAndOrder | undefined;
   isLoading: boolean;
+  onGameEnd: () => void;
 }
 
 interface FormValues {
@@ -42,7 +43,7 @@ const getFieldValueValidators = (gameType: GameType) => {
   }
 };
 
-export default function HandForm({ game }: HandFormProps) {
+export default function HandForm({ game, onGameEnd }: HandFormProps) {
   const {
     reset,
     register,
@@ -53,8 +54,11 @@ export default function HandForm({ game }: HandFormProps) {
   const trpcUtils = api.useContext();
 
   const { mutate, isLoading } = api.game.recordHand.useMutation({
-    onSuccess: () => {
-      void trpcUtils.game.get.invalidate({ id: String(game && game.id) });
+    onSuccess: (updatedGame) => {
+      if (updatedGame.winnerId) {
+        onGameEnd && onGameEnd(); 
+      }
+      void trpcUtils.game.get.invalidate({ id: String(updatedGame.id) });
       reset();
     },
     onError: (error) => {

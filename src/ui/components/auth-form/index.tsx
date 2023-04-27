@@ -48,6 +48,7 @@ export default function AuthorisationForm({ buttonText = 'Sign In' }: Authorisat
         title: "Check your email",
         description: "We've sent you a login link. Be sure to check your spam."
       });
+
       resetForm();
 
     } catch(error) {
